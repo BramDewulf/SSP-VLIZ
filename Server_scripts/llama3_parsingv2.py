@@ -1,44 +1,46 @@
-import requests
 import json
+import requests
 
-# Function to read references from a text file
-def read_references_from_file(file_path):
-    with open(file_path, 'r') as file:
-        references = file.readlines()
-    return references
-
-# Function to send a single API request with all references combined
 def send_api_request(references):
-    url = 'http://localhost:11436/api/generate'
-    
-    # Construct the prompt with all references
-    prompt = "Please parse the following references into a single metadata table according to the provided matrix format:\n\n**Raw References:**\n"
-    for reference in references:
-        prompt += f"{reference.strip()}\n"
-    prompt += "\n**Metadata Table:**\n| Field               | Value                                    |\n|---------------------|------------------------------------------|"
-
-    payload = {
+    url = "http://localhost:11436/api/generate"
+    # Define the metadata format instruction within the prompt
+    prompt_text = (
+        "Parse the following references into a single metadata table with the specified columns:\n"
+        "1. Authors: Each author is listed in separate columns.\n"
+        "2. Year: Represents the year of publication.\n"
+        "3. Title: The title of the article.\n"
+        "4. Journal Name: Provides full names of the journals.\n"
+        "5. Volume/Issue: These details are listed without abbreviations.\n"
+        "6. Page Range: Specifies the range of pages the article covers.\n\n"
+        "References:\n"
+        f"{references}\n\n"
+        "Combine all references into a single markdown table without repeating the headers."
+    )
+    prompt = {
         "model": "llama3",
-        "prompt": prompt
+        "prompt": prompt_text,
+        "stream": False
     }
-    headers = {'Content-Type': 'application/json'}
-    
-    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    response = requests.post(url, json=prompt)
     return response.json()
 
-# Main function
 def main():
-    file_path = 'references.txt'  # Replace with your file path
-    references = read_references_from_file(file_path)
-    
-    # Send API request and get the response
-    response = send_api_request(references)
-    
-    # Save the response to an output file
-    with open('output.txt', 'w') as output_file:
-        output_file.write(response.get('response', 'No response'))
-
-    print("Processing complete. Metadata table saved to output.txt.")
+    with open("references.txt", "r") as file:
+        references = file.read().strip()
+    try:
+        json_response = send_api_request(references)
+        print("API Response:")
+        print(json_response)  # Print the raw API response for debugging
+        if "response" in json_response:
+            metadata_table = json_response["response"]
+            print("Metadata Table:")
+            print(metadata_table)
+            with open("output.txt", "w") as file:
+                file.write(metadata_table)
+        else:
+            print("Error: No 'response' key in JSON response")
+    except Exception as e:
+        print("Error:", e)
 
 if __name__ == "__main__":
     main()
