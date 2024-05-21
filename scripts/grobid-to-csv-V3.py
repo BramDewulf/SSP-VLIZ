@@ -32,7 +32,7 @@ def extract_data_from_xml(xml_file):
                     if forename is not None and surname is not None:
                         author_names.append(f"{forename.text} {surname.text}")
                 if author_names:
-                    data['authors'] = ', '.join(author_names)
+                    data['authors'] = ','.join(author_names)
                 else:
                     data['authors'] = ''  # Set authors to empty string if no authors found
             else:
