@@ -18,7 +18,7 @@ def send_api_request(references, first_batch=False):
         )
     else:
         prompt_text = (
-            "Continue parsing these next references into the existing metadata table with the specified columns (Author, Year, Title, Journal name, Volume/Issue, Page range), using the same matrix format please and keep the same layout using | to split columns. Do not number the references in the table and dont add any columns:\n\n"
+            "Continue parsing these next references into the existing metadata table (use the standard headers: Authors, Year, Title, Journal Name, Volume/Issue, Page range), using the same matrix format with metadata fields split by vertical lines. Do not number the references in the table and dont add any columns and most importantly do not abbreviate any metadata!:\n\n"
             f"{references}\n\n"
         )
     prompt = {
@@ -47,33 +47,28 @@ def process_references_in_batches(references, batch_size=5):
         except Exception as e:
             print(f"Error processing batch {i // batch_size + 1}:", e)
     
-    return all_metadata_tables
-
-def extract_metadata_tables(metadata_tables):
-    extracted_tables = []
-    for table in metadata_tables:
-        matches = re.findall(r'\|.*?\|', table, re.DOTALL)
-        if matches:
-            extracted_tables.append("".join(matches))
-    return extracted_tables
-
-def write_metadata_tables_to_file(metadata_tables, output_file):
-    with open(output_file, "w") as file:
-        for table in metadata_tables:
-            file.write(table + "\n\n")
+    # Combine all the metadata tables, ensuring the header is only included once
+    if all_metadata_tables:
+        combined_metadata_table = all_metadata_tables[0]
+        for table in all_metadata_tables[1:]:
+            combined_metadata_table += "\n" + "\n".join(table.split("\n")[1:])
+        return combined_metadata_table
+    else:
+        return ""
 
 def main():
     with open("references.txt", "r") as file:
         references = file.read().strip()
     
-    metadata_tables = process_references_in_batches(references, batch_size=5)
-    extracted_tables = extract_metadata_tables(metadata_tables)
+    metadata_table = process_references_in_batches(references, batch_size=5)
     
-    if extracted_tables:
-        write_metadata_tables_to_file(extracted_tables, "output.txt")
-        print("Output written to 'output.txt'")
-    else:
-        print("No metadata tables found to write.")
+    print("Metadata Table:")
+    print(metadata_table)
+    
+    with open("output.txt", "w") as file:
+        for line in metadata_table.split('\n'):
+            if line.startswith('|'):
+                file.write(line + '\n')
 
 if __name__ == "__main__":
     main()
