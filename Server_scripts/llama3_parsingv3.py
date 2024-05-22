@@ -9,7 +9,7 @@ def send_api_request(references, first_batch=False):
             "1. Authors: Each author is listed in separate columns.\n"
             "2. Year: Represents the year of publication.\n"
             "3. Title: The title of the article.\n"
-            "4. Journal Name: Provides full names of the journals.\n"
+            "4. Journal/Book Name: Provides full names of the journals or book.\n"
             "5. Volume/Issue: These details are listed without abbreviations.\n"
             "6. Page Range: Specifies the range of pages the article covers.\n\n"
             "References:\n"
@@ -18,7 +18,7 @@ def send_api_request(references, first_batch=False):
         )
     else:
         prompt_text = (
-            "Continue parsing these next references into the existing metadata table (use the standard headers: Authors, Year, Title, Journal Name, Volume/Issue, Page range), using the same matrix format with metadata fields split by vertical lines. Do not number the references in the table and dont add any columns and most importantly do not abbreviate any metadata!:\n\n"
+            "Continue parsing these next references into the existing metadata table (use the standard headers: Authors, Year, Title, Journal/Book Name, Volume/Issue, Page range), using the same matrix format with metadata fields split by vertical lines. Do not number the references in the table and dont add any columns and most importantly do not abbreviate any metadata! (If no data is found just leave the field empty):\n\n"
             f"{references}\n\n"
         )
     prompt = {
@@ -29,7 +29,7 @@ def send_api_request(references, first_batch=False):
     response = requests.post(url, json=prompt)
     return response.json()
 
-def process_references_in_batches(references, batch_size=5):
+def process_references_in_batches(references, batch_size=1):
     reference_list = references.split("\n")
     total_references = len(reference_list)
     all_metadata_tables = []
