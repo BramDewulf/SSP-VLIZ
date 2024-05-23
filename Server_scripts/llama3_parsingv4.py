@@ -57,8 +57,8 @@ def main():
         if "response" in json_response:
             metadata_table = json_response["response"]
             lines = metadata_table.split('\n')
-            for i, line in enumerate(lines):
-                if i == 0 or (line and not line.startswith('| --- ') and not line.startswith('| Authors |')):
+            for line in lines:
+                if line.startswith('|'):
                     print(line)
         else:
             print("Error: No 'response' key in JSON response.")
