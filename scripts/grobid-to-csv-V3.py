@@ -102,7 +102,7 @@ def write_data_to_csv(data, output_csv):
         for entry in data:
             writer.writerow(entry)
 # Fill in target input and output:
-input_xml_file = r'C:\Project\Project testing\grobid_1_5_2500_output.xml'
-output_csv = 'grobid_1_5_2500_output.csv'
+input_xml_file = r'C:\Project\Project testing\grobid_output_150.xml'
+output_csv = 'grobid_150_output.csv'
 bibliographic_data = extract_data_from_xml(input_xml_file)
 write_data_to_csv(bibliographic_data, output_csv)
