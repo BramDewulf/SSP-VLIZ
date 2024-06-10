@@ -5,7 +5,7 @@ services:
     image: grobid/grobid:latest
     restart: unless-stopped
     ports:
-      - "9080:8070"  # Map port 9080 on the host to port 8070 on the container
+      - "9080:8070"  # Ports Host:Container
     deploy:
       resources:
         reservations:
