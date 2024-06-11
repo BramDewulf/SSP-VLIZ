@@ -1,15 +1,9 @@
-version: '3.8'
-
 services:
   grobid:
     image: grobid/grobid:0.8.0
+    container_name: my-grobid-container
     restart: unless-stopped
     ports:
       - "8070:8070"  # Ports Host:Container
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
     ulimits:
       core: 0
