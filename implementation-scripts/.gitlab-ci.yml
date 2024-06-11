@@ -1,11 +1,10 @@
 image: docker:latest
 
 stages:
-  - build
   - deploy
 
 variables:
-  DOCKER_IMAGE_NAME: grobid/grobid
+  DOCKER_COMPOSE_FILE: docker-compose.yml
 
 default:
   before_script:
@@ -13,35 +12,13 @@ default:
     - echo ${REMOTE_DOCKER_HOST}
     - ssh -nNT -L $(pwd)/docker.sock:/var/run/docker.sock ${REMOTE_DOCKER_HOST} &
 
-.step-build:
-  stage: build
-  tags:
-    - linux
-  script:
-    - DOCKER_HOST=unix://$(pwd)/docker.sock docker compose build
-    - kill %1
-
 .step-deploy:
   stage: deploy
   tags:
     - linux
   script:
-    - DOCKER_HOST=unix://$(pwd)/docker.sock docker compose up -d
+    - DOCKER_HOST=unix://$(pwd)/docker.sock docker compose up -d --force-recreate
     - kill %1
-
-step-build-dev:
-  extends: .step-build
-  environment:
-    name: development
-  only:
-    - develop
-
-step-build-prod:
-  extends: .step-build
-  environment:
-    name: production
-  only:
-    - master
 
 step-deploy-dev:
   extends: .step-deploy
@@ -51,10 +28,10 @@ step-deploy-dev:
   only:
     - develop
 
-step-deploy-prod:
-  extends: .step-deploy
-  environment:
-    name: production
-    url: http://${REMOTE_DOCKER_HOST}:8070
-  only:
-    - master
+# step-deploy-prod:
+#   extends: .step-deploy
+#   environment:
+#     name: production
+#     url: http://${REMOTE_DOCKER_HOST}:8070
+#   only:
+#     - master
