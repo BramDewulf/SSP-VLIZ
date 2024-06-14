@@ -1,3 +1,5 @@
+<!-- Script used for GROBID implementation obn Aphia codebase, only used as example, not functional  -->
+ 
 <?php
 /**
  * PHP implementation for GROBID API. Written by Bram Dewulf for VLIZ, requires marinespecies.og codebase to function

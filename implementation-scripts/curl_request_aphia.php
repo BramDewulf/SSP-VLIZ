@@ -1,3 +1,4 @@
+<!-- Demo of typical GROBID curl request in PHP -->
 <?php 
     $citation = "Hobbs III, H H. (1978). New species of ostracods from the Gulf Coastal Plain (Ostracoda: Entocytheridae). Transactions of the American Microscopical Society, 97 (4), 502-511";
     // Strip HTML tags from the citation

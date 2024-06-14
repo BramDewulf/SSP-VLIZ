@@ -1,3 +1,4 @@
+# Docker compose file to deploy GROBID on docker-dev.vliz.be server
 services:
   grobid:
     image: grobid/grobid:0.8.0

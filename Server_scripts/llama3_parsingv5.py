@@ -1,3 +1,4 @@
+# Script used to automate Llama3 requests to API endpoint
 import json
 import requests
 import sys

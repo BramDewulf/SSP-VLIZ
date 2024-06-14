@@ -1,3 +1,5 @@
+# Conversion script used to convert GROBID XML output to CSV format to test quality of GROBID in Excel (version 1)
+
 import csv
 import os
 import xml.etree.ElementTree as ET

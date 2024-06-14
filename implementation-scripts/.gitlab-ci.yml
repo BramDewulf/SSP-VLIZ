@@ -1,3 +1,4 @@
+# Each change gets pushed on the server by this gitlab functionality through CI/CD (Continuous Integration and Continuous Deployment (or Delivery))
 image: docker:latest
 
 stages:

@@ -1,3 +1,4 @@
+# Obsolete, only used docker-compose file
 # Use the official GROBID image as the base image (latest image)
 FROM grobid/grobid:latest
 

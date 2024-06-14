@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Script used to automate Llama3 requests to API endpoint
 # Define the API endpoint
 url="http://localhost:11436/api/generate"
 
